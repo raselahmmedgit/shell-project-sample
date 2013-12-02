@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title</title>
+    <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+    <script src="@Url.Content("~/Scripts/jquery-2.0.3.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery-ui-1.8.11.min.js")" type="text/javascript"></script>
+    
+    <!-- angular js -->
+    <script src="@Url.Content("~/Scripts/angular.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/ng-grid/ng-grid.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/modernizr-2.6.2.js")" type="text/javascript"></script>
+</head>
+<body ng-controller="MyCtrl">
+    <div class="page">
+        <header>
+            <div id="header">
+                <div id="logo">
+                    <img src="../../Content/logo.png" alt="Shell logo" />
+                </div>
+                <div id="title">
+                    <h1>Shell Loyalty Portal</h1>
+                </div>
+                <div id="logindisplay">
+                    @Html.Partial("_LogOnPartial")
+                </div> 
+            </div>
+        </header>
+        <section id="main">
+            <div id="left-pane">
+                <ul id="left-menu">
+                    <li><a href="#">Shell Rewards</a></li>
+                    <li><a href="#">Program Admin</a></li>
+                    <li><a href="#">Reports</a></li>
+                </ul>
+            </div>
+            <div id="right-pane">
+                <div id="main-manu">
+                    <ul id="menu">
+                        <li><a href="#">Offers</a></li>
+                    </ul>
+                </div>
+                <div id="main-content">
+                     @RenderBody()
+                </div>
+            </div>
+        </section>
+        <footer>
+            <div id="footer"></div>
+        </footer>
+    </div>
+</body>
+</html>

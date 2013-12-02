@@ -1,0 +1,131 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+<div class="row">
+    <div class="pull-left">
+        <h3>
+            Offers List</h3>
+    </div>
+    <div class="pull-right">
+        <button class="btn-up">
+            U
+        </button>
+        <button class="btn-down">
+            D
+        </button>
+    </div>
+</div>
+<div class="row">
+    <div class="pull-left">
+        <button class="btn-srng">
+            SRNG
+        </button>
+        <button class="btn-local">
+            Local
+        </button>
+    </div>
+    <div class="pull-right">
+        <button class="btn-exclusite">
+            Set Exclusivity
+        </button>
+        <button class="btn-search">
+            S
+        </button>
+    </div>
+</div>
+<div class="row">
+    <div class="pull-left">
+        <h5>
+            Shell Rewards Promotions
+        </h5>
+    </div>
+    <div class="pull-right">
+        <a href="#">View Messages</a>
+    </div>
+</div>
+<div class="row">
+    <div id="ngGrid">
+        <div style="position: absolute; left: 0; right: 0; top: 0; bottom: 0; overflow: hidden"
+            ng-grid="gridOptions">
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="pull-right">
+        <button class="btn-save">
+            Save
+        </button>
+        <button class="btn-cancel">
+            Cancel
+        </button>
+    </div>
+</div>
+<script type="text/javascript">
+
+    $(function () {
+
+        var app = angular.module('myApp', ['ngGrid']);
+        app.controller('MyCtrl', function ($scope, $http) {
+            $scope.filterOptions = {
+                filterText: "",
+                useExternalFilter: true
+            };
+            $scope.totalServerItems = 0;
+            $scope.pagingOptions = {
+                pageSizes: [250, 500, 1000],
+                pageSize: 250,
+                currentPage: 1
+            };
+            $scope.setPagingData = function (data, page, pageSize) {
+                var pagedData = data.slice((page - 1) * pageSize, page * pageSize);
+                $scope.myData = pagedData;
+                $scope.totalServerItems = data.length;
+                if (!$scope.$$phase) {
+                    $scope.$apply();
+                }
+            };
+            $scope.getPagedDataAsync = function (pageSize, page, searchText) {
+                setTimeout(function () {
+                    var data;
+                    if (searchText) {
+                        var ft = searchText.toLowerCase();
+                        $http.get('/Home/GetData').success(function (largeLoad) {
+                            data = largeLoad.filter(function (item) {
+                                return JSON.stringify(item).toLowerCase().indexOf(ft) != -1;
+                            });
+                            $scope.setPagingData(data, page, pageSize);
+                        });
+                    } else {
+                        $http.get('/Home/GetData').success(function (largeLoad) {
+                            $scope.setPagingData(largeLoad, page, pageSize);
+                        });
+                    }
+                }, 100);
+            };
+
+            $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage);
+
+            $scope.$watch('pagingOptions', function (newVal, oldVal) {
+                if (newVal !== oldVal && newVal.currentPage !== oldVal.currentPage) {
+                    $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText);
+                }
+            }, true);
+            $scope.$watch('filterOptions', function (newVal, oldVal) {
+                if (newVal !== oldVal) {
+                    $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText);
+                }
+            }, true);
+
+            $scope.gridOptions = {
+                data: 'myData',
+                enablePaging: true,
+                showFooter: true,
+                totalServerItems: 'totalServerItems',
+                pagingOptions: $scope.pagingOptions,
+                filterOptions: $scope.filterOptions
+            };
+        });
+
+    });
+
+</script>
