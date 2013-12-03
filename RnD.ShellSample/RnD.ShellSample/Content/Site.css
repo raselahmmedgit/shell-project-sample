@@ -562,3 +562,9 @@ footer, #footer
     font-weight: bold;
     color: #fff;
 }
+
+.ng-grid
+{
+    border: 1px solid black;
+    height: 200px;
+}

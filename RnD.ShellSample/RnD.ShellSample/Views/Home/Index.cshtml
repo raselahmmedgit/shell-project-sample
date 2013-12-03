@@ -45,8 +45,7 @@
 </div>
 <div class="row">
     <div id="ngGrid">
-        <div style="position: absolute; left: 0; right: 0; top: 0; bottom: 0; overflow: hidden"
-            ng-grid="gridOptions">
+        <div class="ng-grid" ng-grid="myGrid">
         </div>
     </div>
 </div>
@@ -62,70 +61,39 @@
 </div>
 <script type="text/javascript">
 
-    $(function () {
+    //Start Basic
+    var myAppRoot = angular.module('myApp', ['ngGrid']);
 
-        var app = angular.module('myApp', ['ngGrid']);
-        app.controller('MyCtrl', function ($scope, $http) {
-            $scope.filterOptions = {
-                filterText: "",
-                useExternalFilter: true
-            };
-            $scope.totalServerItems = 0;
-            $scope.pagingOptions = {
-                pageSizes: [250, 500, 1000],
-                pageSize: 250,
-                currentPage: 1
-            };
-            $scope.setPagingData = function (data, page, pageSize) {
-                var pagedData = data.slice((page - 1) * pageSize, page * pageSize);
-                $scope.myData = pagedData;
-                $scope.totalServerItems = data.length;
-                if (!$scope.$$phase) {
-                    $scope.$apply();
-                }
-            };
-            $scope.getPagedDataAsync = function (pageSize, page, searchText) {
-                setTimeout(function () {
-                    var data;
-                    if (searchText) {
-                        var ft = searchText.toLowerCase();
-                        $http.get('/Home/GetData').success(function (largeLoad) {
-                            data = largeLoad.filter(function (item) {
-                                return JSON.stringify(item).toLowerCase().indexOf(ft) != -1;
-                            });
-                            $scope.setPagingData(data, page, pageSize);
-                        });
-                    } else {
-                        $http.get('/Home/GetData').success(function (largeLoad) {
-                            $scope.setPagingData(largeLoad, page, pageSize);
-                        });
-                    }
-                }, 100);
-            };
+    myAppRoot.controller('myController', function ($scope) {
 
-            $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage);
+        //define some object here
+        $scope.myData = [{ PriorityId: 1, Priority: '1', PromoType: 'AllQuip', OfferId: 321, Name: 'Car Wash', Description: 'Description', StartDate: '1-Nov-2013', EndDate: '1-Dec-2013', Status: 'Active' },
+                    { PriorityId: 2, Priority: '2', PromoType: 'Drive MOP', OfferId: 654, Name: 'Holiday', Description: 'Description', StartDate: '5-Nov-2013', EndDate: '5-Dec-2013', Status: 'InActive' },
+                    { PriorityId: 3, Priority: '3', PromoType: 'Dolor', OfferId: 987, Name: 'Member Bonus', Description: 'Description', StartDate: '10-Nov-2013', EndDate: '10-Dec-2013', Status: 'Active' },
+                    { PriorityId: 4, Priority: '4', PromoType: 'Odio', OfferId: 741, Name: 'Name of Template', Description: 'Description', StartDate: '15-Nov-2013', EndDate: '15-Dec-2013', Status: 'Pending' },
+                    { PriorityId: 5, Priority: '5', PromoType: 'Lupt', OfferId: 852, Name: 'Test Template', Description: 'Description', StartDate: '20-Nov-2013', EndDate: '20-Dec-2013', Status: 'InActive' }
+                ];
 
-            $scope.$watch('pagingOptions', function (newVal, oldVal) {
-                if (newVal !== oldVal && newVal.currentPage !== oldVal.currentPage) {
-                    $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText);
-                }
-            }, true);
-            $scope.$watch('filterOptions', function (newVal, oldVal) {
-                if (newVal !== oldVal) {
-                    $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText);
-                }
-            }, true);
+        $scope.pagingOptions = {
+            pageSizes: [10, 20, 30, 40, 50],
+            pageSize: 10,
+            currentPage: 1
+        };
 
-            $scope.gridOptions = {
-                data: 'myData',
-                enablePaging: true,
-                showFooter: true,
-                totalServerItems: 'totalServerItems',
-                pagingOptions: $scope.pagingOptions,
-                filterOptions: $scope.filterOptions
-            };
-        });
-
+        //now add the above object to your ngGrid
+        $scope.myGrid = {
+            data: 'myData',
+            enablePaging: true,
+            showFooter: true,
+            showFilter: false,
+            enableColumnResize: true,
+            //showGroupPanel: true,
+            //jqueryUIDraggable: true,
+            jqueryUITheme: true
+        };
     });
+    //End Basic
+
+   
 
 </script>
