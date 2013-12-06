@@ -17,10 +17,10 @@
 </div>
 <div class="row">
     <div class="pull-left">
-        <button class="btn-srng">
+        <button id="btnSRNG" class="active btn-srng">
             SRNG
         </button>
-        <button class="btn-local">
+        <button id="btnLocal" class="btn-local">
             Local
         </button>
     </div>
@@ -77,6 +77,12 @@
             Nunc tristique tempus lectus.</p>
     </div>
 </div>
+<style type="text/css">
+    .active
+    {
+        background-color: red;
+    }
+</style>
 <script type="text/javascript">
 
     $(function () {
@@ -85,10 +91,23 @@
 
         $("#liSRNG").click(function () {
             alert("liSRNG");
+
         });
 
         $("#liLocal").click(function () {
             alert("liLocal");
+        });
+
+        $("#btnSRNG").click(function () {
+            $(this).addClass('active');
+            $("#btnLocal").removeClass('active');
+            alert("btnSRNG");
+        });
+
+        $("#btnLocal").click(function () {
+            $(this).addClass('active');
+            $("#btnSRNG").removeClass('active');
+            alert("btnLocal");
         });
 
     });
