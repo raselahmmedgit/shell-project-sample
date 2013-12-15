@@ -31,5 +31,11 @@ namespace RnD.ShellSample.Controllers
 
             return Json(shellRewardsPromotionViewModels, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult TreeView()
+        {
+            return View();
+        }
+
     }
 }
