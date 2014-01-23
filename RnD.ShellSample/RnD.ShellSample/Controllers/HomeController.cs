@@ -98,7 +98,7 @@ namespace RnD.ShellSample.Controllers
                 }
             }
 
-            return Json(nodes);
+            return Json(nodes.ToArray(), JsonRequestBehavior.AllowGet);
         }
 
     }
